@@ -8,7 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "echarts": "^4.8.0",
+    "element-ui": "^2.13.2",
+    "module": "^1.2.5",
+    "mongoose": "^5.9.20",
     "vue": "^2.6.11"
   },
   "devDependencies": {
