@@ -31,3 +31,13 @@ export function fetchLatest(ts_code) {
         }
     })
 }
+
+export function getHistoricalAvg(ts_code) {
+    return request({
+        url: '/daily/average',
+        method: 'get',
+        params: {
+            tscode: ts_code
+        }
+    })
+}

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-input v-model="ts_code" @change="changeCurrent"/>
-        <div>
+        <div class="info-container">
             <el-row>
                 <el-col :xs="24" :sm="24" class="stock-title">
                     {{name}}
@@ -62,13 +62,305 @@
                 </el-col>
             </el-row>
         </div>
+        <el-tabs v-model="active_avg_info" class="info-container">
+            <el-tab-pane label="30个交易日平均指标" name="30">
+                <el-row>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>板块：</b>{{industry}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>最后更新日期：</b>{{latest_data.trade_date}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>收盘价：</b>{{historical_avg["30"].close | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率：</b>{{historical_avg["30"].turnover_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率（流通股）：</b>{{historical_avg["30"].turnover_rate_f | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>量比：</b>{{historical_avg["30"].volume_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率：</b>{{historical_avg["30"].pe | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率（TTM）：</b>{{historical_avg["30"].pe_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市净率：</b>{{historical_avg["30"].pb | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率：</b>{{historical_avg["30"].ps | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率（TTM）：</b>{{historical_avg["30"].ps_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率：</b>{{historical_avg["30"].dv_ratio | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率（TTM）：</b>{{historical_avg["30"].dv_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总股本：</b>{{historical_avg["30"].total_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通股本：</b>{{historical_avg["30"].float_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>自由流通股本：</b>{{historical_avg["30"].free_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总市值：</b>{{historical_avg["30"].total_mv | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通市值：</b>{{historical_avg["30"].circ_mv | numberFilter}}
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="150个交易日平均指标" name="150">
+                <el-row>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>板块：</b>{{industry}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>最后更新日期：</b>{{latest_data.trade_date}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>收盘价：</b>{{historical_avg["150"].close | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率：</b>{{historical_avg["150"].turnover_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率（流通股）：</b>{{historical_avg["150"].turnover_rate_f | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>量比：</b>{{historical_avg["150"].volume_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率：</b>{{historical_avg["150"].pe | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率（TTM）：</b>{{historical_avg["150"].pe_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市净率：</b>{{historical_avg["150"].pb | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率：</b>{{historical_avg["150"].ps | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率（TTM）：</b>{{historical_avg["150"].ps_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率：</b>{{historical_avg["150"].dv_ratio | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率（TTM）：</b>{{historical_avg["150"].dv_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总股本：</b>{{historical_avg["150"].total_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通股本：</b>{{historical_avg["150"].float_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>自由流通股本：</b>{{historical_avg["150"].free_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总市值：</b>{{historical_avg["150"].total_mv | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通市值：</b>{{historical_avg["150"].circ_mv | numberFilter}}
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="300个交易日平均指标" name="300">
+                <el-row>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>板块：</b>{{industry}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>最后更新日期：</b>{{latest_data.trade_date}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>收盘价：</b>{{historical_avg["300"].close | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率：</b>{{historical_avg["300"].turnover_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率（流通股）：</b>{{historical_avg["300"].turnover_rate_f | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>量比：</b>{{historical_avg["300"].volume_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率：</b>{{historical_avg["300"].pe | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率（TTM）：</b>{{historical_avg["300"].pe_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市净率：</b>{{historical_avg["300"].pb | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率：</b>{{historical_avg["300"].ps | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率（TTM）：</b>{{historical_avg["300"].ps_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率：</b>{{historical_avg["300"].dv_ratio | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率（TTM）：</b>{{historical_avg["300"].dv_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总股本：</b>{{historical_avg["300"].total_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通股本：</b>{{historical_avg["300"].float_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>自由流通股本：</b>{{historical_avg["300"].free_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总市值：</b>{{historical_avg["300"].total_mv | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通市值：</b>{{historical_avg["300"].circ_mv | numberFilter}}
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="900个交易日平均指标" name="900">
+                <el-row>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>板块：</b>{{industry}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>最后更新日期：</b>{{latest_data.trade_date}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>收盘价：</b>{{historical_avg["900"].close | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率：</b>{{historical_avg["900"].turnover_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率（流通股）：</b>{{historical_avg["900"].turnover_rate_f | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>量比：</b>{{historical_avg["900"].volume_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率：</b>{{historical_avg["900"].pe | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率（TTM）：</b>{{historical_avg["900"].pe_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市净率：</b>{{historical_avg["900"].pb | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率：</b>{{historical_avg["900"].ps | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率（TTM）：</b>{{historical_avg["900"].ps_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率：</b>{{historical_avg["900"].dv_ratio | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率（TTM）：</b>{{historical_avg["900"].dv_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总股本：</b>{{historical_avg["900"].total_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通股本：</b>{{historical_avg["900"].float_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>自由流通股本：</b>{{historical_avg["900"].free_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总市值：</b>{{historical_avg["900"].total_mv | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通市值：</b>{{historical_avg["900"].circ_mv | numberFilter}}
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="3000个交易日平均指标" name="3000">
+                <el-row>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>板块：</b>{{industry}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>最后更新日期：</b>{{latest_data.trade_date}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>收盘价：</b>{{historical_avg["3000"].close | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率：</b>{{historical_avg["3000"].turnover_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>换手率（流通股）：</b>{{historical_avg["3000"].turnover_rate_f | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>量比：</b>{{historical_avg["3000"].volume_rate | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率：</b>{{historical_avg["3000"].pe | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市盈率（TTM）：</b>{{historical_avg["3000"].pe_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市净率：</b>{{historical_avg["3000"].pb | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率：</b>{{historical_avg["3000"].ps | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>市销率（TTM）：</b>{{historical_avg["3000"].ps_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率：</b>{{historical_avg["3000"].dv_ratio | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>股息率（TTM）：</b>{{historical_avg["3000"].dv_ttm | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总股本：</b>{{historical_avg["3000"].total_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通股本：</b>{{historical_avg["3000"].float_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>自由流通股本：</b>{{historical_avg["3000"].free_share | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>总市值：</b>{{historical_avg["3000"].total_mv | numberFilter}}
+                    </el-col>
+                    <el-col :xs="24" :sm="8" class="stock-info-piece">
+                        <b>流通市值：</b>{{historical_avg["3000"].circ_mv | numberFilter}}
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+        </el-tabs>
         <charts-template class="charts-offset" :height="'750px'" ref="chartsTemplate"/>
     </div>
 </template>
 
 <script>
     import ChartsTemplate from "@/components/ChartsTemplate";
-    import { fetchData, fetchDataSize, fetchLatest } from "@/api/statistic";
+    import { fetchData, fetchDataSize, fetchLatest, getHistoricalAvg } from "@/api/statistic";
 
     export default {
         name: "ChartsMain",
@@ -78,6 +370,7 @@
                 ts_code:'000001.SZ',
                 name: '',
                 industry: '',
+                active_avg_info: "30",
                 latest_data: {
                     trade_date: '',
                     close: 0,
@@ -96,6 +389,13 @@
                     free_share: 0,
                     total_mv: 0,
                     circ_mv: 0
+                },
+                historical_avg: {
+                    "30":{},
+                    "150": {},
+                    "300": {},
+                    "900": {},
+                    "3000": {}
                 },
                 dataset_raw : {},
                 pageSize: 400,
@@ -344,12 +644,25 @@
                 }
             }
         },
+        filters: {
+            numberFilter(value) {
+                if (value) {
+                    return parseFloat(value).toFixed(4);
+                }
+                return '';
+            }
+        },
         methods: {
             fetchLatestData: function(ts_code) {
                 fetchLatest(ts_code).then(res => {
                     this.name = res.data.data.name;
                     this.industry = res.data.data.industry_type;
                     this.latest_data = res.data.data;
+                })
+            },
+            fetchHistoricalAvg: function(ts_code) {
+                getHistoricalAvg(ts_code).then(res => {
+                    this.historical_avg = res.data.data;
                 })
             },
             fetchStockData: function (ts_code) {
@@ -447,11 +760,13 @@
             changeCurrent(ts_code){
                 this.ts_code = ts_code;
                 this.fetchLatestData(ts_code);
+                this.fetchHistoricalAvg(this.ts_code);
                 this.fetchStockData(ts_code);
             }
         },
         created: function () {
             this.fetchLatestData(this.ts_code);
+            this.fetchHistoricalAvg(this.ts_code);
             this.fetchStockData(this.ts_code);
         }
     }
@@ -469,5 +784,10 @@
 
     .stock-info-piece {
         padding-bottom: 4px;
+    }
+
+    .info-container {
+        max-width: 1400px;
+        margin: auto;
     }
 </style>
