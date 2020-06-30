@@ -21,3 +21,13 @@ export function fetchDataSize(ts_code) {
         }
     })
 }
+
+export function fetchLatest(ts_code) {
+    return request({
+        url: '/daily/latest',
+        method : 'get',
+        params: {
+            tscode: ts_code
+        }
+    })
+}

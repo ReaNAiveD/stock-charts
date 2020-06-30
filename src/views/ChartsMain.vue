@@ -1,13 +1,74 @@
 <template>
     <div>
         <el-input v-model="ts_code" @change="changeCurrent"/>
+        <div>
+            <el-row>
+                <el-col :xs="24" :sm="24" class="stock-title">
+                    {{name}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>板块：</b>{{industry}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>最后更新日期：</b>{{latest_data.trade_date}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>收盘价：</b>{{latest_data.close}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>换手率：</b>{{latest_data.turnover_rate}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>换手率（流通股）：</b>{{latest_data.turnover_rate_f}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>量比：</b>{{latest_data.volume_rate}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>市盈率：</b>{{latest_data.pe}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>市盈率（TTM）：</b>{{latest_data.pe_ttm}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>市净率：</b>{{latest_data.pb}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>市销率：</b>{{latest_data.ps}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>市销率（TTM）：</b>{{latest_data.ps_ttm}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>股息率：</b>{{latest_data.dv_ratio}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>股息率（TTM）：</b>{{latest_data.dv_ttm}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>总股本：</b>{{latest_data.total_share}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>流通股本：</b>{{latest_data.float_share}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>自由流通股本：</b>{{latest_data.free_share}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>总市值：</b>{{latest_data.total_mv}}
+                </el-col>
+                <el-col :xs="24" :sm="8" class="stock-info-piece">
+                    <b>流通市值：</b>{{latest_data.circ_mv}}
+                </el-col>
+            </el-row>
+        </div>
         <charts-template class="charts-offset" :height="'750px'" ref="chartsTemplate"/>
     </div>
 </template>
 
 <script>
     import ChartsTemplate from "@/components/ChartsTemplate";
-    import { fetchData, fetchDataSize } from "@/api/statistic";
+    import { fetchData, fetchDataSize, fetchLatest } from "@/api/statistic";
 
     export default {
         name: "ChartsMain",
@@ -15,8 +76,29 @@
         data: function () {
             return {
                 ts_code:'000001.SZ',
+                name: '',
+                industry: '',
+                latest_data: {
+                    trade_date: '',
+                    close: 0,
+                    turnover_rate: 0,
+                    turnover_rate_f: 0,
+                    volume_rate: 0,
+                    pe: 0,
+                    pe_ttm: 0,
+                    pb: 0,
+                    ps: 0,
+                    ps_ttm: 0,
+                    dv_ratio: 0,
+                    dv_ttm: 0,
+                    total_share: 0,
+                    float_share: 0,
+                    free_share: 0,
+                    total_mv: 0,
+                    circ_mv: 0
+                },
                 dataset_raw : {},
-                pageSize: 200,
+                pageSize: 400,
                 option: {
                     tooltip: {
                         trigger: 'axis',
@@ -263,6 +345,13 @@
             }
         },
         methods: {
+            fetchLatestData: function(ts_code) {
+                fetchLatest(ts_code).then(res => {
+                    this.name = res.data.data.name;
+                    this.industry = res.data.data.industry_type;
+                    this.latest_data = res.data.data;
+                })
+            },
             fetchStockData: function (ts_code) {
                 this.dataset_raw = {
                     trade_date: [],
@@ -276,7 +365,7 @@
                     ps: [],
                     ps_ttm: [],
                     dv_ratio: [],
-                    dv_ttm: [''],
+                    dv_ttm: [],
                     total_share: [],
                     float_share: [],
                     free_share: [],
@@ -357,10 +446,12 @@
             },
             changeCurrent(ts_code){
                 this.ts_code = ts_code;
+                this.fetchLatestData(ts_code);
                 this.fetchStockData(ts_code);
             }
         },
         created: function () {
+            this.fetchLatestData(this.ts_code);
             this.fetchStockData(this.ts_code);
         }
     }
@@ -369,5 +460,14 @@
 <style scoped>
     .charts-offset{
         margin-top: 50px;
+    }
+
+    .stock-title{
+        font-size: 24px;
+        padding-bottom: 8px;
+    }
+
+    .stock-info-piece {
+        padding-bottom: 4px;
     }
 </style>
