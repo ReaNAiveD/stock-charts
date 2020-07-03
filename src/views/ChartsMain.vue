@@ -62,7 +62,14 @@
                 </el-col>
             </el-row>
         </div>
-        <el-tabs v-model="active_avg_info" class="info-container">
+
+
+        <div class="analysis">
+            根据 {{ active_avg_info }}个交易日平均指标中的市盈率与市净率，建议 <b>{{ advice }}</b> 此股票
+        </div>
+
+
+        <el-tabs v-model="active_avg_info" class="info-container" @tab-click="handleClick">
             <el-tab-pane label="30个交易日平均指标" name="30">
                 <el-row>
                     <el-col :xs="24" :sm="8" class="stock-info-piece">
@@ -371,6 +378,7 @@
                 name: '',
                 industry: '',
                 active_avg_info: "30",
+                advice: "",
                 latest_data: {
                     trade_date: '',
                     close: 0,
@@ -660,9 +668,10 @@
                     this.latest_data = res.data.data;
                 })
             },
-            fetchHistoricalAvg: function(ts_code) {
+            async fetchHistoricalAvg(ts_code) {
                 getHistoricalAvg(ts_code).then(res => {
                     this.historical_avg = res.data.data;
+                    this.handleClick();
                 })
             },
             fetchStockData: function (ts_code) {
@@ -762,6 +771,27 @@
                 this.fetchLatestData(ts_code);
                 this.fetchHistoricalAvg(this.ts_code);
                 this.fetchStockData(ts_code);
+            },
+
+            handleClick() {
+                let pe_avg = this.historical_avg[this.active_avg_info].pe,
+                    pb_avg = this.historical_avg[this.active_avg_info].pb,
+                    pe_curr = this.latest_data.pe,
+                    pb_curr = this.latest_data.pb;   // 市盈率 & 市净率
+
+                // compare
+                let pe_comp = Math.abs(pe_avg - pe_curr) > pe_avg * 0.1,
+                    pb_comp = Math.abs(pb_avg - pb_curr) > pb_avg * 0.1;
+
+                if (pe_comp && pb_comp) {
+                    this.advice = "卖出";
+                }
+                else if (!pe_comp && !pb_comp) {
+                    this.advice = "买入";
+                }
+                else {
+                    this.advice = "持仓";
+                } 
             }
         },
         created: function () {
@@ -773,6 +803,11 @@
 </script>
 
 <style scoped>
+    .analysis {
+        margin: 45px 0;
+        color: brown;
+    }
+
     .charts-offset{
         margin-top: 50px;
     }
@@ -789,5 +824,6 @@
     .info-container {
         max-width: 1400px;
         margin: auto;
+        margin-bottom: 30px;
     }
 </style>
