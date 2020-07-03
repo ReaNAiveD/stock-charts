@@ -668,7 +668,7 @@
                     this.latest_data = res.data.data;
                 })
             },
-            async fetchHistoricalAvg(ts_code) {
+            fetchHistoricalAvg: function(ts_code) {
                 getHistoricalAvg(ts_code).then(res => {
                     this.historical_avg = res.data.data;
                     this.handleClick();
